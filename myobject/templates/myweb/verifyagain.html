@@ -1,0 +1,200 @@
+{% extends "myweb/gouwubase.html" %}
+{% load static from staticfiles %}
+{% block head %}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>会员中心-我的商城</title>
+<meta name="description" content="会员中心，我的商城">
+<meta name="Keywords" content="魅族手机官网商城、魅族官方在线商店、魅族在线商城、魅族官网在线商店、魅族商城、魅蓝商城">
+<link href="{% static 'myweb/img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon" />
+<link href="{% static 'myweb/img/favicon.ico' %}" rel="icon" type="image/x-icon">
+<!-- Bootstrap -->
+<link href="{% static 'myweb/css/bootstrap.min.css' %}" rel="stylesheet">
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="{% static 'myweb/js/jquery-1.12.4.min.js' %}"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="{% static 'myweb/js/bootstrap.min.js' %}"></script>
+<!-- 兼任ie9以下 -->
+<!--[if lt IE 9]>
+<script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+<script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+<!-- 自定义 -->
+<link rel="stylesheet" type="text/css" href="{% static 'myweb/css/global.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'myweb/css/app.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'myweb/css/member.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'myweb/css/member-app.css' %}">
+
+<script type="text/javascript" src="{% static 'myweb/js/rem.js' %}"></script>
+<script type="text/javascript" src="{% static 'myweb/js/topNav.js' %}?id=33"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'myweb/css/cart.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'myweb/css/cart-app.css' %}">
+
+{% endblock %}
+{% block mainbodys %}
+<div class="mainbody cart">
+
+		<div class="container">
+
+			<!-- 购物车详情头 -->
+			<table class="cart-header">
+				<tbody>
+					<tr>
+						<td class="cart-col-name col-md-3 hidden-xs hidden-sm">收货人信息确认</td>
+					</tr>
+				</tbody>
+			</table><!-- 购物车详情头 E-->
+			
+			<!-- 购物清单信息列表 -->
+			<div class="cart-merchant-list">
+				<div class="cart-merchant">
+				{% for v in detailslist  %}
+					<table class="cart-merchant-body">
+						<tbody>
+						<form action="{% url 'myweb_verifyagain' %}" method="post">
+						{% csrf_token %}
+
+							<tr class="cart-product" id="pro5">
+
+								<td class="cart-col-total col-md-1 hidden-xs hidden-sm">
+									<p><h4><b>收货人姓名</b></h4></p>
+									<!-- <span >{{ v.linkman }}{{ request.session.linkman}}</span> -->
+									<input value=" {{ v.linkman }}{{ request.session.linkman}} " disabled=""></input>
+								</td>
+
+								<td class="cart-col-select col-md-3 col-xs-4 col-sm-4">
+										<p><h4><b>收货人电话</b></h4></p>
+									  	<!-- <span class="cart-product-desc">{{ v.phone }}</span> -->
+									  	<input type="text" value="{{ v.phone }}" disabled="">
+								</td>
+
+								<td class="cart-col-name col-md-3 col-xs-8 col-sm-8">
+										<p><h4><b>收货人地址</b></h4></p>
+										<!-- <span class="cart-product-desc">{{ v.address }}</span> -->
+										<input type="text" value="{{ v.address }}" disabled="">
+									</a>
+								</td>
+						
+<!-- 
+								<td class="cart-col-price col-md-2 hidden-xs hidden-sm">
+									<p>
+										<span class="cart-product-price">修改</span>
+										<span class="cart-product-price">添加</span>
+									</p>
+								</td> -->
+
+							</tr>
+							</form>
+						</tbody>
+					</table>
+					{% endfor %}
+				</div>
+			</div><!-- 购物清单信息列表 E-->
+
+
+			<!-- 购物车详情头 -->
+			<table class="cart-header">
+				<tbody>
+					<tr>
+						</td>
+						<td class="cart-col-name col-md-3 hidden-xs hidden-sm">商品</td>
+						<td class="cart-col-price col-md-2 hidden-xs hidden-sm" style="text-align:right;">单价(元)x件&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td class="cart-col-total col-md-1 hidden-xs hidden-sm">小计(元)</td>
+					</tr>
+				</tbody>
+			</table><!-- 购物车详情头 E-->
+			
+			<!-- 购物清单信息列表 -->
+			<div class="cart-merchant-list">
+				<div class="cart-merchant">
+					<table class="cart-merchant-body">
+						<tbody>
+						{% for shop in request.session.shoplist.values %}
+							<tr class="cart-product" id="pro5">
+
+								<td class="cart-col-select col-md-3 col-xs-4 col-sm-4">  
+									<a href="{% url 'myweb_detail' shop.id %}" class="cart-product-link" target="_blank">
+										<img src="/static/goods/s_{{ shop.picname }}" class="cart-product-img" alt="{{ shop.goods }}" width="50">
+									</a>
+								</td>
+
+								<td class="cart-col-name col-md-3 col-xs-8 col-sm-8">
+									<a href="{% url 'myweb_detail' shop.id %}" class="cart-product-link" target="_blank">
+									  <p>{{ shop.goods }}</p>
+									  <span class="cart-product-desc">全网通公开版 流光金 32GB{{ shop.store }}</span>
+									</a>
+									<p class="">
+										<span class="cart-product-price">{{ shop.price }}</span>
+									</p>
+									<div class="cart-col-number">
+										<div class="cart-product-number-adder">
+											<p class="cart-product-number-max show"></p>
+											<div class="mz-adder">
+												<button class="mz-adder-subtract disabled"></button>
+												<div class="mz-adder-num"><input class="mz-adder-input" value="1" type="text"></div>
+												<button class="mz-adder-add"></button>
+											</div>
+										</div>
+									</div>
+								</td>
+
+								<td class="cart-col-price col-md-2 hidden-xs hidden-sm">
+									<p>
+										<span class="cart-product-price">{{ shop.price }}元×{{ shop.m }}</span>
+									</p>
+								</td>
+								<td class="cart-col-total col-md-1 hidden-xs hidden-sm">
+									<span class="cart-product-price total">{% widthratio shop.price 1 shop.m %}</span>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div><!-- 购物清单信息列表 E-->
+		</div>
+		<!-- 结算详情 -->
+		<div class="cart-footer" id="cartFooter">
+			<div class="container">
+			   <div class="cart-footer-left col-md-6 col-xs-4 col-sm-4">
+				   <div class="cart-select-all JSelectAll" data-mdesc="全选按钮" data-mtype="store_cart_all">
+				   </div>
+				   <span class="cart-footer-count">
+						共
+						<span class="cart-footer-num" id="totalCount"></span>
+						件商品
+				   </span>
+				</div>
+				<div class="cart-footer-right col-md-5 col-md-offset-1 col-sm-offset-2 col-xs-8 col-sm-6">
+					<span class="cart-footer-sum">
+						<span class="cart-footer-text">已优惠</span>
+						<span class="cart-footer-num red" id="totalDiscount">0.00</span>
+						<span class="cart-footer-text">元， 合计(不含运费)：</span>
+						<span class="cart-footer-total" id="totalPrice"></span>
+					</span>
+					{% if request.session.loginstate == 1%}
+					<a href="{% url 'myweb_order' %}"><div class="mz-btn success" id="cartSubmit">确认</div></a>
+					{% else %}
+					<a href="{% url 'myweb_login' %}"><div class="mz-btn success" id="cartSubmit">确认</div></a>
+					{% endif %}
+				</div>
+			</div>
+		</div><!-- 结算详情 E-->
+	</div>
+    <!-- 主内容区域 E-->
+{% endblock %}
+
+{% block textjs %}
+	<script type="text/javascript">//回顶部
+      		backTop();
+      		//全选
+      		allSelect();
+      		//商品数量加减
+      		cartAddMin();
+	</script>
+
+{% endblock %}
